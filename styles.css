@@ -26,3 +26,17 @@ header{display:flex;align-items:center;gap:25px;height:90px;position:relative;z-
 
 /* Keep the confirmed two-page resume readable in the restored layout. */
 .resume-pages{display:grid;gap:30px;min-width:0}
+
+/* The project preview is an actual capture of the public analysis workbench. */
+.geo-feature{grid-template-columns:.75fr 1.25fr;gap:38px;padding:42px}
+.geo-feature .geo-feature-note{font-size:11px;margin:22px 0 0;line-height:1.95}
+.geo-preview{display:block;min-width:0;overflow:hidden;border:1px solid #a1c5ee32;border-radius:10px;background:#080f1c;box-shadow:0 22px 60px #0003;transition:border-color .2s}
+.geo-preview:hover{border-color:#8bdcd575}
+.geo-preview-top,.geo-preview-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;font-size:10px;color:#a8bdd9}
+.geo-preview-top{border-bottom:1px solid var(--line)}
+.geo-preview-top span:first-child{color:#d8e8fa}
+.geo-preview img{display:block;width:100%;height:auto}
+.geo-preview-foot{border-top:1px solid var(--line);font-size:9px;color:#94aecf}
+.geo-preview-foot span:last-child{color:#aee8e0}
+@media(max-width:1100px){.geo-feature{padding:30px;gap:28px;grid-template-columns:.85fr 1.15fr}}
+@media(max-width:760px){.geo-feature{grid-template-columns:1fr;padding:25px;gap:28px}.geo-preview-top,.geo-preview-foot{padding:11px 12px;font-size:9px}.geo-preview-foot{font-size:8px}}
