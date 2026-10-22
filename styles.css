@@ -23,3 +23,6 @@ header{display:flex;align-items:center;gap:25px;height:90px;position:relative;z-
 .resume-preview-link{display:block;min-width:0}.resume-preview{display:block;height:auto;max-width:100%;background:#fff;box-shadow:0 30px 90px #0004}
 
 .workspace>*{min-width:0}.result-item{overflow-wrap:anywhere}
+
+/* Keep the confirmed two-page resume readable in the restored layout. */
+.resume-pages{display:grid;gap:30px;min-width:0}
