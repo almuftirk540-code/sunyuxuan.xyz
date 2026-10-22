@@ -2,10 +2,10 @@
 const $ = selector => document.querySelector(selector);
 const state = { mode: 'real', ready: false, job: null, result: null, realResult: null, realDraft: null, busy: false, refreshing: false, poll: null, key: null, payload: null };
 const labels = {queued:'排队中',waiting_executor:'等待执行端',running:'正在采集',needs_attention:'等待维护者处理',completed:'已完成',failed:'采集失败'};
-const examples = {mode:'example',brand:'知页（虚构品牌）',platform:'示例平台',status:'completed',questions:[
-{question:'小团队如何选择知识库工具？',answer:'【界面示例，非模型真实回答】先比较检索能力、权限管理与维护成本。示例中提及知页，用于展示品牌提及的记录方式。',brand_mentioned:true,sources:[]},
-{question:'知识库工具应该比较哪些能力？',answer:'【界面示例，非模型真实回答】可以从文档组织、搜索、协作和导入导出四方面建立对照表。本条未出现目标品牌。',brand_mentioned:false,sources:[]},
-{question:'怎样把已有文档迁移到团队知识库？',answer:'【界面示例，非模型真实回答】先整理目录与权限，再小批量迁移并验证检索。示例中的知页仅为虚构名称。',brand_mentioned:true,sources:[]}
+const examples = {mode:'example',brand:'示例品牌（虚构）',platform:'示例平台',status:'completed',questions:[
+{question:'某类产品有哪些常见选择？',answer:'【报告格式示例，非真实回答】此处展示平台回答原文。这条示例包含“示例品牌”，用于说明品牌提及的记录方式。',brand_mentioned:true,sources:[]},
+{question:'选择这类产品时，需要比较哪些信息？',answer:'【报告格式示例，非真实回答】此处展示另一条平台回答。本条示例没有出现目标品牌，用于说明未提及的记录方式。',brand_mentioned:false,sources:[]},
+{question:'在哪里查找这类产品的可靠资料？',answer:'【报告格式示例，非真实回答】真实报告会保留回答及已记录的引用链接。本条包含“示例品牌”，用于展示统计格式，未提供真实信源。',brand_mentioned:true,sources:[]}
 ]};
 async function api(path, options={}) {
  const response = await fetch(`api/public${path}`, {...options,credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},signal:AbortSignal.timeout(15000)});
@@ -18,7 +18,7 @@ function setProgress(count) {document.querySelectorAll('.progress span').forEach
 function resetResult() {
  state.result=null;
  $('#result-title').textContent='任务与结果';$('#result-status').textContent='尚未提交';setProgress(0);$('#result-actions').hidden=true;
- const box=el('div',undefined,'empty');box.append(el('span','↗','empty-symbol'),el('h3','一个好问题，是观察的起点。'),el('p','在左侧填写问题，提交后查看任务状态。也可以切换到“查看示例”，先了解报告如何呈现。'));$('#results').replaceChildren(box);
+ const box=el('div',undefined,'empty');box.append(el('span','↗','empty-symbol'),el('h3','任务结果将在这里显示。'),el('p','真实服务尚未接通时不会提交任务。可先切换“查看示例”，了解报告结构。'));$('#results').replaceChildren(box);
 }
 function draw(data,example=false) {
  const items=Array.isArray(data.questions)?data.questions:[];
