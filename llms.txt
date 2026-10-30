@@ -1,0 +1,15 @@
+# 孙宇轩｜业务、项目与 AI 探索
+
+> 孙宇轩的个人作品集，公开介绍商务拓展、项目运营与 AI 应用实践。
+
+## 公开内容
+- [静态文字版](https://sunyuxuan.xyz/read.html)：个人介绍与项目详情，无需运行 JavaScript。
+- [纯文本](https://sunyuxuan.xyz/llms-full.txt)：文字版正文。
+- [个人主页](https://sunyuxuan.xyz/)：动态作品集。
+- [个人简历](https://sunyuxuan.xyz/resume.html)：简历预览及下载。
+- [完整简历 PDF](https://sunyuxuan.xyz/assets/sun-yuxuan-resume.pdf)：两页个人简历。
+- [GEO 分析案例](https://sunyuxuan.xyz/geo-report/)：历史只读案例。
+- [案例公开数据](https://sunyuxuan.xyz/geo-report/data/bailijin-doubao.json)：交互页面使用的 JSON 数据。
+
+## 内容口径
+GEO 工作台为历史只读展示，非实时监测服务。白皮书经历为方案策划与立项，不代表正式出版。动态视频为视觉演示，非项目实录。
