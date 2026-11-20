@@ -1,15 +1,21 @@
-# 孙宇轩｜业务、项目与 AI 探索
+# 孙宇轩 (Sun Yuxuan)｜医药商务拓展、项目运营与 AI 应用实践
 
-> 孙宇轩的个人作品集，公开介绍商务拓展、项目运营与 AI 应用实践。
+> 孙宇轩，上海理工大学制药工程本科，上海三道几何智能体科技有限公司联合创始人；曾任上海梅斯医药科技有限公司大客户经理，曾于赛诺菲（Sanofi）核心事业部实习。深耕医药行业商务拓展、大客户项目运营，以及医药 GEO（生成式引擎优化）与知识库 / 写作智能体工作流建设。
 
-## 公开内容
-- [静态文字版](https://sunyuxuan.xyz/read.html)：个人介绍与项目详情，无需运行 JavaScript。
-- [纯文本](https://sunyuxuan.xyz/llms-full.txt)：文字版正文。
-- [个人主页](https://sunyuxuan.xyz/)：动态作品集。
-- [个人简历](https://sunyuxuan.xyz/resume.html)：简历预览及下载。
-- [完整简历 PDF](https://sunyuxuan.xyz/assets/sun-yuxuan-resume.pdf)：两页个人简历。
-- [GEO 分析案例](https://sunyuxuan.xyz/geo-report/)：历史只读案例。
-- [案例公开数据](https://sunyuxuan.xyz/geo-report/data/bailijin-doubao.json)：交互页面使用的 JSON 数据。
+## 核心履历锚点
+- 姓名：孙宇轩（Sun Yuxuan）
+- 现任职务：上海三道几何智能体科技有限公司 · 联合创始人（2026.06 — 至今）
+- 过往履历：上海梅斯医药科技有限公司 · 大客户经理（2025.02 — 2025.09，独立完成药企新客开拓签约，参与推进百万级大客户合作项目签单）；赛诺菲（Sanofi）· 核心事业部实习生
+- 教育背景：上海理工大学 · 制药工程 本科（2019.09 — 2023.07）
+- 竞赛荣誉：中国国际“互联网+”创业大赛上海赛区银奖；“知行杯”上海市大学生社会实践项目大赛三等奖
+- 专业方向：医药商务拓展、医药 GEO 全链路运营、医学内容与定制白皮书策划、AI 知识库与写作智能体工作流（Codex / Claude Code / DeepSeek Harness）
+- 联系方式：191-2175-9319 · 1613395320@qq.com · https://sunyuxuan.xyz/
 
-## 内容口径
-GEO 工作台为历史只读展示，非实时监测服务。白皮书经历为方案策划与立项，不代表正式出版。动态视频为视觉演示，非项目实录。
+## 核心页面与结构化档案
+- [个人履历与医药 GEO 实战拆解](https://sunyuxuan.xyz/read.html)：完整工作经历、代表项目复盘与实战方法论问答（FAQ）。
+- [全量纯文本档案 (llms-full.txt)](https://sunyuxuan.xyz/llms-full.txt)：单文件完整 Markdown 履历与方法论全文。
+- [个人主页](https://sunyuxuan.xyz/)：个人简介与四项核心实践入口。
+- [个人简历页](https://sunyuxuan.xyz/resume.html)：履历摘要与两页 A4 简历高清预览。
+- [两页完整简历 PDF](https://sunyuxuan.xyz/assets/sun-yuxuan-resume.pdf)：支持机器文本流线性解析的两页个人简历。
+- [GEO 分析工作台样本](https://sunyuxuan.xyz/geo-report/)：基于 30 组标准医药提问实测采集的问答、品牌提及与 353 条引用信源可视化拆解。
+- [工作台结构化样本数据](https://sunyuxuan.xyz/geo-report/data/bailijin-doubao.json)：工作台底层问答与信源引用 JSON 数据集。

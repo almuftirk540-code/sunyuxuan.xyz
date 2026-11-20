@@ -46,10 +46,43 @@
   const gaze = new T.Vector3();
   const lookAt = new T.Vector3();
   const group = new T.Group();
+  const baseRotX = T.MathUtils.degToRad(-28.4);
+  const baseRotY = T.MathUtils.degToRad(390);
+  const baseRotZ = T.MathUtils.degToRad(4.92);
   group.position.set(.343, .16, -1);
-  group.rotation.set(T.MathUtils.degToRad(-28.4), T.MathUtils.degToRad(390), T.MathUtils.degToRad(4.92));
+  group.rotation.set(baseRotX, baseRotY, baseRotZ);
   group.scale.set(5, 5, 6);
   scene.add(group);
+
+  // Interactive focus & scroll state coupled with UI cards and dialog
+  const FOCUS_PRESETS = {
+    '-1': { accent: [0.62, 0.47, 1.00], glow: 0.0, morph: 0.0, swirl: 1.0, rx: 0.0, ry: 0.0, rz: 0.0, cx: 0.0, cy: 0.0, cz: 0.0 },
+    '0':  { accent: [0.44, 0.88, 1.00], glow: 1.0, morph: 1.15, swirl: 1.45, rx: 0.14, ry: -0.22, rz: 0.06, cx: -0.14, cy: 0.08, cz: -0.22 },
+    '1':  { accent: [0.74, 0.54, 1.00], glow: 1.0, morph: 2.35, swirl: 1.60, rx: -0.12, ry: 0.26, rz: -0.08, cx: -0.08, cy: -0.06, cz: -0.28 },
+    '2':  { accent: [0.95, 0.78, 0.50], glow: 1.0, morph: 3.45, swirl: 1.30, rx: 0.18, ry: 0.16, rz: 0.10, cx: -0.12, cy: 0.05, cz: -0.18 },
+    '3':  { accent: [0.48, 0.90, 0.76], glow: 1.0, morph: 4.55, swirl: 1.50, rx: -0.16, ry: -0.18, rz: -0.05, cx: -0.10, cy: -0.08, cz: -0.20 }
+  };
+  const uiState = {
+    focusIndex: -1,
+    dialogOpen: false,
+    scrollProgress: 0,
+    accent: new T.Vector3(0.62, 0.47, 1.00),
+    targetAccent: new T.Vector3(0.62, 0.47, 1.00),
+    glow: 0,
+    targetGlow: 0,
+    morph: 0,
+    targetMorph: 0,
+    swirl: 1,
+    targetSwirl: 1,
+    rotOffset: new T.Vector3(),
+    targetRotOffset: new T.Vector3(),
+    camOffset: new T.Vector3(),
+    targetCamOffset: new T.Vector3(),
+    energyScale: 1,
+    targetEnergyScale: 1,
+    pendingPulse: null
+  };
+
   const pointer = { x: .5, y: .5, lastX: .5, lastY: .5, dx: 0, dy: 0, moved: false, stamp: 0 };
   const quadScene = new T.Scene();
   const quadCamera = new T.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -123,32 +156,41 @@
   const mask = shader('uniform sampler2D source;void main(){vec3 c=texture2D(source,vUv).rgb;gl_FragColor=vec4(c,max(max(c.r,c.g),c.b));}', { source: val(null) });
 
   const sdfSource = `
-    float shape(vec3 p){
-      if(length(p)>.8)return length(p)-.7;
+    float shape(vec3 p, float m){
+      if(length(p)>.86)return length(p)-.7;
       p.z=sqrt(p.z*p.z+.0215)-sqrt(.012);
       p=p.zxy;
-      float a=atan(p.z,p.y);float r=.255+.024*cos(3.*a)+.014*sin(2.*a);
-      float tube=.086+.014*cos(2.*a+.5);
-      vec2 q=vec2(length(p.yz)-r,p.x-.022*sin(2.*a));
+      float a=atan(p.z,p.y);
+      float r=.255+(.024+.011*sin(m*1.4))*cos(3.*a+m*.75)+(.014+.009*cos(m*1.1))*sin(2.*a-m*.55);
+      float tube=.086+.014*cos(2.*a+.5+m*.65);
+      vec2 q=vec2(length(p.yz)-r,p.x-(.022+.01*sin(m*.9))*sin(2.*a+m*.6));
       q.y*=1.06;return length(q)-tube;
     }
-    vec3 normalAt(vec3 p){vec2 e=vec2(.001,0.);return normalize(vec3(shape(p+e.xyy)-shape(p-e.xyy),shape(p+e.yxy)-shape(p-e.yxy),shape(p+e.yyx)-shape(p-e.yyx))+vec3(.0000001));}
+    vec3 normalAt(vec3 p, float m){vec2 e=vec2(.001,0.);return normalize(vec3(shape(p+e.xyy,m)-shape(p-e.xyy,m),shape(p+e.yxy,m)-shape(p-e.yxy,m),shape(p+e.yyx,m)-shape(p-e.yyx,m))+vec3(.0000001));}
     vec3 curlNoise(vec3 p,float t){return normalize(vec3(-1.1*sin(p.y*1.1+t)-1.3*cos(p.z*1.3+t),-2.1*sin(p.z*2.1-t)-1.9*cos(p.x*1.9-t),-2.3*sin(p.x*2.3)-1.7*cos(p.y*1.7+t)));}
   `;
   const projectionView = new T.Matrix4();
   const simulation = shader(`uniform sampler2D source;uniform sampler2D origin;uniform sampler2D flow;uniform sampler2D dye;
-    uniform float time;uniform float hz;uniform float healing;uniform mat4 viewProjection;uniform mat4 sculpture;uniform mat3 cameraRotation;
+    uniform float time;uniform float hz;uniform float healing;uniform float morph;uniform float swirl;
+    uniform mat4 viewProjection;uniform mat4 sculpture;uniform mat3 cameraRotation;
     ${sdfSource}
-    void main(){vec3 p=texture2D(source,vUv).xyz;vec3 o=texture2D(origin,vUv).xyz;if(length(p)>.7)p*=.5;
+    void main(){vec3 p=texture2D(source,vUv).xyz;vec3 o=texture2D(origin,vUv).xyz;if(length(p)>.72)p*=.5;
       p+=curlNoise(p*.1+time*.05,time*.025)*.0002*hz;
-      vec3 n=normalAt(p);p+=cross(normalize(p+vec3(.00001)),n)*.0005*hz;
-      p-=n*shape(p)*healing;p+=(o-p)*.0002*hz;
+      vec3 n=normalAt(p,morph);p+=cross(normalize(p+vec3(.00001)),n)*.0005*swirl*hz;
+      p-=n*shape(p,morph)*healing;p+=(o-p)*.0002*hz;
       vec4 clip=viewProjection*sculpture*vec4(p,1.);vec2 uv=clip.xy/max(clip.w,.01)*.5+.5;
       float den=min(texture2D(dye,uv).r,2.);vec3 force=cameraRotation*vec3(texture2D(flow,uv).xy,0.);
       if(uv.x>0.&&uv.x<1.&&uv.y>0.&&uv.y<1.)p+=force*.0001*hz*.4*den;
       gl_FragColor=vec4(p,1.);
-    }`, { source: val(null), origin: val(null), flow: val(velocity.read.texture), dye: val(densityMask.texture), time: val(0), hz: val(1), healing: val(.5), viewProjection: val(projectionView), sculpture: val(group.matrixWorld), cameraRotation: val(new T.Matrix3()) });
+    }`, {
+      source: val(null), origin: val(null), flow: val(velocity.read.texture), dye: val(densityMask.texture),
+      time: val(0), hz: val(1), healing: val(.5), morph: val(0), swirl: val(1),
+      viewProjection: val(projectionView), sculpture: val(group.matrixWorld), cameraRotation: val(new T.Matrix3())
+    });
+
   let positions, originTexture, geometry, points, pointMaterial;
+  const baseEnergyForSide = (side) => (side <= 128 ? 2.8 : side <= 256 ? 1.5 : 1);
+
   function createParticles(side) {
     if (points) { group.remove(points); geometry.dispose(); positions.read.dispose(); positions.write.dispose(); originTexture.dispose(); pointMaterial.dispose(); }
     particleSide = side;
@@ -174,29 +216,77 @@
     geometry.setAttribute('position', new T.BufferAttribute(uvPositions, 3));
     geometry.setAttribute('random', new T.BufferAttribute(attributes, 4));
     pointMaterial = track(new T.ShaderMaterial({
-      uniforms: { positions: val(positions.read.texture), time: val(0), dpr: val(renderer.getPixelRatio()), energy: val(side <= 128 ? 2.8 : side <= 256 ? 1.5 : 1) },
+      uniforms: {
+        positions: val(positions.read.texture),
+        time: val(0),
+        dpr: val(renderer.getPixelRatio()),
+        energy: val(baseEnergyForSide(side)),
+        accent: val(uiState.accent.clone()),
+        focusGlow: val(uiState.glow)
+      },
       vertexShader: `precision highp float;uniform sampler2D positions;uniform float dpr;attribute vec4 random;varying vec4 vRandom;varying float vScale;
         void main(){vec3 p=texture2D(positions,position.xy).xyz;p*=mix(1.,1.5,pow(random.y,150.));
         vec4 view=modelViewMatrix*vec4(p,1.);float dist=length(view.xyz);vScale=smoothstep(3.,15.,dist)*mix(.5,1.,random.z);
-        gl_PointSize=clamp(.04*dpr*2.*vScale*(1000./max(-view.z,.1)),.65,6.);gl_Position=projectionMatrix*view;vRandom=random;}`,
-      fragmentShader: `precision highp float;uniform float time;uniform float energy;varying vec4 vRandom;varying float vScale;
+        gl_PointSize=clamp(.04*dpr*2.*vScale*(1000./max(-view.z,.1)),.65,6.2);gl_Position=projectionMatrix*view;vRandom=random;}`,
+      fragmentShader: `precision highp float;uniform float time;uniform float energy;uniform vec3 accent;uniform float focusGlow;varying vec4 vRandom;varying float vScale;
         void main(){vec2 uv=gl_PointCoord*2.-1.;float rr=dot(uv,uv);if(rr>1.||vScale<.1)discard;
         vec3 n=vec3(uv,sqrt(max(0.,1.-rr)));float light=.36+.64*max(dot(n,normalize(vec3(-.4,.7,1.))),0.);
-        vec3 col=mix(vec3(.035+vRandom.x*.165),vec3(.6,.45,1.),pow(vRandom.z,100.));
-        float sparkle=.5+(.4+sin(time*4.+vRandom.y*20.))*pow(vRandom.z,10.)*2.5;
-        float edge=1.-smoothstep(.15,1.,rr);gl_FragColor=vec4(col*max(.14,sparkle)*light*energy,edge*.85);}`,
+        float rim=pow(max(0.,dot(n,normalize(vec3(.52,.38,.76)))),1.75);
+        float starExp=mix(92.,22.,focusGlow);
+        vec3 baseGrey=vec3(.036+vRandom.x*.165);
+        vec3 tintedBase=mix(baseGrey,baseGrey*.46+accent*(.14+.34*rim),focusGlow*.92);
+        vec3 col=mix(tintedBase,accent*1.15,pow(vRandom.z,starExp));
+        float sparkle=.5+(.4+sin(time*4.+vRandom.y*20.))*pow(vRandom.z,10.)*(2.5+focusGlow*1.05);
+        float edge=1.-smoothstep(.15,1.,rr);gl_FragColor=vec4(col*max(.14,sparkle)*light*energy,edge*.87);}`,
       transparent: true, blending: T.AdditiveBlending, depthTest: true, depthWrite: false
     }));
     points = new T.Points(geometry, pointMaterial); points.frustumCulled = false; group.add(points);
   }
+
+  function updateUIState(dt) {
+    const ease = 1 - Math.pow(.91, dt * 60);
+    const slowEase = 1 - Math.pow(.94, dt * 60);
+    uiState.accent.lerp(uiState.targetAccent, ease);
+    uiState.glow += (uiState.targetGlow - uiState.glow) * ease;
+    uiState.morph += (uiState.targetMorph - uiState.morph) * slowEase;
+    uiState.swirl += (uiState.targetSwirl - uiState.swirl) * ease;
+    uiState.rotOffset.lerp(uiState.targetRotOffset, slowEase);
+    uiState.camOffset.lerp(uiState.targetCamOffset, slowEase);
+    uiState.energyScale += (uiState.targetEnergyScale - uiState.energyScale) * ease;
+
+    const scrollAngle = smallLayout ? uiState.scrollProgress * 0.95 : 0;
+    const ambientY = (!paused && smallLayout) ? Math.sin(elapsed * 0.35) * 0.08 : 0;
+    const ambientX = (!paused && smallLayout) ? Math.cos(elapsed * 0.27) * 0.05 : 0;
+    group.rotation.set(
+      baseRotX + uiState.rotOffset.x + ambientX + scrollAngle * 0.25,
+      baseRotY + uiState.rotOffset.y + ambientY + scrollAngle,
+      baseRotZ + uiState.rotOffset.z
+    );
+
+    simulation.uniforms.morph.value = uiState.morph;
+    simulation.uniforms.swirl.value = uiState.swirl;
+    if (pointMaterial) {
+      pointMaterial.uniforms.accent.value.copy(uiState.accent);
+      pointMaterial.uniforms.focusGlow.value = uiState.glow;
+      pointMaterial.uniforms.energy.value = baseEnergyForSide(particleSide) * uiState.energyScale;
+    }
+  }
+
   function cameraUpdate(dt) {
-    gaze.copy(base);
-    if (!paused && !reduced.matches) { gaze.x += -(pointer.x * 2 - 1) * .55; gaze.y += (1 - pointer.y * 2) * .7; }
+    gaze.copy(base).add(uiState.camOffset);
+    if (smallLayout) {
+      gaze.y -= uiState.scrollProgress * 0.42;
+    }
+    if (!paused && !reduced.matches) {
+      gaze.x += -(pointer.x * 2 - 1) * .55;
+      gaze.y += (1 - pointer.y * 2) * .7;
+    }
     camera.position.lerp(gaze, 1 - Math.pow(.95, dt * 60));
     camera.lookAt(lookAt); camera.updateMatrixWorld(); group.updateMatrixWorld();
     projectionView.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
     simulation.uniforms.cameraRotation.value.setFromMatrix4(camera.matrixWorld);
   }
+
   function advanceParticles(hz, healing = .5) {
     simulation.uniforms.source.value = positions.read.texture;
     simulation.uniforms.flow.value = velocity.read.texture;
@@ -205,20 +295,41 @@
     simulation.uniforms.healing.value = healing;
     pass(simulation, positions.write); positions.swap(); pointMaterial.uniforms.positions.value = positions.read.texture;
   }
+
+  function applySplatSegment(ax, ay, bx, by, vx, vy, rad) {
+    const u = splat.uniforms;
+    u.pointA.value.set(ax, ay);
+    u.pointB.value.set(bx, by);
+    u.radius.value = rad;
+    u.source.value = velocity.read.texture;
+    u.color.value.set(vx, vy, 0);
+    pass(splat, velocity.write); velocity.swap();
+    u.source.value = density.read.texture;
+    u.color.value.set(1, 1, 1);
+    pass(splat, density.write); density.swap();
+  }
+
   function splatPointer() {
+    if (uiState.pendingPulse) {
+      const p = uiState.pendingPulse;
+      applySplatSegment(p.ax, p.ay, p.bx, p.by, p.vx, p.vy, p.rad);
+      uiState.pendingPulse = null;
+    }
     if (!pointer.moved) return;
     const len = Math.hypot(pointer.dx * width, pointer.dy * height);
     if (len > .01) {
-      const u = splat.uniforms;
-      u.pointA.value.set(pointer.lastX, 1 - pointer.lastY); u.pointB.value.set(pointer.x, 1 - pointer.y);
-      u.radius.value = Math.max(.008, Math.min(len / 5, 1) * .18 * (mobile ? .8 : 1));
+      const radius = Math.max(.008, Math.min(len / 5, 1) * .18 * (mobile ? .8 : 1));
       const mult = Math.min(len / 15, 1) * 10;
-      u.source.value = velocity.read.texture; u.color.value.set(pointer.dx * width * mult, -pointer.dy * height * mult, 0);
-      pass(splat, velocity.write); velocity.swap();
-      u.source.value = density.read.texture; u.color.value.set(1, 1, 1); pass(splat, density.write); density.swap();
+      applySplatSegment(
+        pointer.lastX, 1 - pointer.lastY,
+        pointer.x, 1 - pointer.y,
+        pointer.dx * width * mult, -pointer.dy * height * mult,
+        radius
+      );
     }
     pointer.moved = false; pointer.dx = 0; pointer.dy = 0;
   }
+
   function advanceFluid(dt) {
     splatPointer();
     curl.uniforms.source.value = velocity.read.texture; pass(curl, curlTarget);
@@ -233,17 +344,25 @@
     a.flow.value = velocity.read.texture; a.source.value = density.read.texture; a.sourceSize.value.set(dyeRes, dyeRes); a.fade.value = Math.pow(.97, dt * 60);
     pass(advection, density.write); density.swap(); mask.uniforms.source.value = density.read.texture; pass(mask, densityMask);
   }
+
   function draw() { renderer.setRenderTarget(null); renderer.render(scene, camera); }
+
+  function syncScroll() {
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    uiState.scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+  }
+
   function resize() {
     width = innerWidth; height = innerHeight;
     const changedLayout = smallLayout !== (width <= 760);
     smallLayout = width <= 760;
     renderer.setSize(width, height, false); camera.aspect = width / height;
-    // Keep the sculpture behind the upper half of the mobile information panel.
-    if (width <= 760) { camera.fov = 42; group.scale.set(3.6, 3.6, 4.2); group.position.set(.25, 1.0, -1.5); }
+    if (width <= 760) { camera.fov = 42; group.scale.set(3.8, 3.8, 4.4); group.position.set(.22, .82, -1.45); }
     else { camera.fov = 30; group.scale.set(5, 5, 6); group.position.set(.343, .16, -1); }
     camera.updateProjectionMatrix(); densityMask.setSize(Math.min(width, 1600), Math.min(height, 1200));
     splat.uniforms.aspect.value = width / height;
+    syncScroll();
+    updateUIState(1 / 60);
     cameraUpdate(1 / 60);
     if (points && !contextLost) {
       if (changedLayout) {
@@ -253,6 +372,7 @@
       draw();
     }
   }
+
   function onPointer(event) {
     const now = performance.now();
     const x = event.clientX / width, y = event.clientY / height;
@@ -261,12 +381,56 @@
     pointer.dx += x - pointer.x; pointer.dy += y - pointer.y;
     pointer.x = x; pointer.y = y; pointer.stamp = now; pointer.moved = true;
   }
+
+  function applyTargets() {
+    const preset = FOCUS_PRESETS[String(uiState.focusIndex)] || FOCUS_PRESETS['-1'];
+    uiState.targetAccent.set(preset.accent[0], preset.accent[1], preset.accent[2]);
+    uiState.targetGlow = preset.glow;
+    uiState.targetMorph = preset.morph;
+    uiState.targetSwirl = preset.swirl;
+    uiState.targetRotOffset.set(preset.rx, preset.ry, preset.rz);
+    const dialogZ = uiState.dialogOpen ? 0.68 : 0;
+    const dialogX = uiState.dialogOpen ? -0.22 : 0;
+    uiState.targetCamOffset.set(preset.cx + dialogX, preset.cy, preset.cz + dialogZ);
+    uiState.targetEnergyScale = uiState.dialogOpen ? 0.62 : 1.0;
+  }
+
+  const onFocusProject = (event) => {
+    const idx = Number.isInteger(event.detail?.index) ? event.detail.index : -1;
+    if (idx === uiState.focusIndex) return;
+    const prev = uiState.focusIndex;
+    uiState.focusIndex = idx;
+    applyTargets();
+    if (!paused && !reduced.matches && idx >= 0 && idx !== prev) {
+      const angle = idx * 1.57 + 0.4;
+      const cx = smallLayout ? 0.52 : 0.54;
+      const cy = 0.50;
+      uiState.pendingPulse = {
+        ax: cx - Math.cos(angle) * 0.035,
+        ay: cy - Math.sin(angle) * 0.035,
+        bx: cx + Math.cos(angle) * 0.035,
+        by: cy + Math.sin(angle) * 0.035,
+        vx: Math.cos(angle) * 42,
+        vy: Math.sin(angle) * 42,
+        rad: 0.075
+      };
+    }
+  };
+
+  const onDialogState = (event) => {
+    uiState.dialogOpen = Boolean(event.detail?.open);
+    applyTargets();
+  };
+
   function frame(now) {
     frameId = 0;
     if (disposed || paused || document.hidden || contextLost) return;
     const rawDt = previousTime ? (now - previousTime) / 1000 : 1 / 60;
     const dt = Math.min(Math.max(rawDt, 1 / 120), 1 / 30); previousTime = now;
-    elapsed += dt; cameraUpdate(dt); advanceFluid(dt);
+    elapsed += dt;
+    updateUIState(dt);
+    cameraUpdate(dt);
+    advanceFluid(dt);
     advanceParticles(dt * 60, elapsed < 3 ? .035 + elapsed / 3 * .465 : .5);
     pointMaterial.uniforms.time.value = elapsed; draw(); frames++;
     if (frames > 120 && rawDt > .055 && particleSide === 512) slowFrames++; else slowFrames = Math.max(0, slowFrames - 1);
@@ -288,9 +452,12 @@
   const lost = (event) => { event.preventDefault(); contextLost = true; cancelAnimationFrame(frameId); frameId = 0; fallback('context-lost'); };
   const restored = () => { contextLost = false; document.documentElement.classList.remove('webgl-unavailable'); createParticles(particleSide); for (let i = 0; i < 40; i++) advanceParticles(1); draw(); start(); };
   window.addEventListener('resize', resize);
+  window.addEventListener('scroll', syncScroll, { passive: true });
   window.addEventListener('pointermove', onPointer, { passive: true });
   window.addEventListener('pointerdown', onPointer, { passive: true });
   window.addEventListener('axon:motion', motionEvent);
+  window.addEventListener('axon:focus', onFocusProject);
+  window.addEventListener('axon:dialog', onDialogState);
   document.addEventListener('visibilitychange', visibility);
   reduced.addEventListener('change', reduceEvent);
   canvas.addEventListener('webglcontextlost', lost);
@@ -305,11 +472,14 @@
   } catch (error) { fallback('initialization-failed'); console.warn('Particle scene could not initialize.', error); }
   window.axonScene = {
     setPaused,
-    diagnostics: () => ({ count: particleSide * particleSide, paused, frames, adaptive, webgl2, contextLost, fluidResolution: simRes, dyeResolution: dyeRes, drawCalls: renderer.info.render.calls }),
+    setFocus: (index) => onFocusProject({ detail: { index } }),
+    diagnostics: () => ({ count: particleSide * particleSide, paused, frames, adaptive, webgl2, contextLost, focusIndex: uiState.focusIndex, fluidResolution: simRes, dyeResolution: dyeRes, drawCalls: renderer.info.render.calls }),
     destroy() {
       disposed = true; cancelAnimationFrame(frameId);
-      window.removeEventListener('resize', resize); window.removeEventListener('pointermove', onPointer); window.removeEventListener('pointerdown', onPointer);
-      window.removeEventListener('axon:motion', motionEvent); document.removeEventListener('visibilitychange', visibility); reduced.removeEventListener('change', reduceEvent);
+      window.removeEventListener('resize', resize); window.removeEventListener('scroll', syncScroll);
+      window.removeEventListener('pointermove', onPointer); window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('axon:motion', motionEvent); window.removeEventListener('axon:focus', onFocusProject); window.removeEventListener('axon:dialog', onDialogState);
+      document.removeEventListener('visibilitychange', visibility); reduced.removeEventListener('change', reduceEvent);
       canvas.removeEventListener('webglcontextlost', lost); canvas.removeEventListener('webglcontextrestored', restored);
       resources.forEach(r => r.dispose()); renderer.dispose();
     }

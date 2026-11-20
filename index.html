@@ -4,126 +4,194 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <title>孙宇轩｜业务、项目与 AI 探索</title>
-  <meta name="description" content="孙宇轩的个人作品集：联合创始人，关注商务拓展、项目运营与 AI 应用。探索 GEO 分析案例、医药项目与个人经历。">
+  <title>孙宇轩｜医药业务、项目运营与 AI 应用</title>
+  <meta name="description" content="孙宇轩的个人主页：上海三道几何联合创始人，专注医药商务拓展、项目全链路运营与 GEO / AI 智能体工作流建设。">
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('js-motion');
+    }
+  </script>
   <link rel="stylesheet" href="axon.css?v=20261028-text-only-3">
+  <link rel="stylesheet" href="preview.css?v=20261120-motion-4">
   <script src="assets/vendor/three.min.js" defer></script>
-  <script src="axon-particles.js?v=20261028-text-only-3" defer></script>
-  <script src="axon-ui.js?v=20261028-text-only-3" defer></script>
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://sunyuxuan.xyz/">
-<link rel="alternate" type="text/plain" href="https://sunyuxuan.xyz/llms-full.txt" title="个人介绍与项目纯文本">
+  <script src="axon-particles.js?v=20261120-motion-4" defer></script>
+  <script src="axon-ui.js?v=20261120-motion-4" defer></script>
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://sunyuxuan.xyz/">
+  <link rel="alternate" type="text/plain" href="https://sunyuxuan.xyz/llms-full.txt" title="孙宇轩个人履历与项目实践全文">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "url": "https://sunyuxuan.xyz/",
+    "name": "孙宇轩｜医药业务、项目运营与 AI 应用",
+    "inLanguage": "zh-CN",
+    "dateModified": "2026-11-20",
+    "mainEntity": {
+      "@type": "Person",
+      "@id": "https://sunyuxuan.xyz/#person",
+      "name": "孙宇轩",
+      "alternateName": "Sun Yuxuan",
+      "url": "https://sunyuxuan.xyz/",
+      "jobTitle": "联合创始人｜医药商务拓展、项目运营与 AI 应用",
+      "telephone": "+86-191-2175-9319",
+      "email": "mailto:1613395320@qq.com",
+      "worksFor": { "@type": "Organization", "name": "上海三道几何智能体科技有限公司" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "上海理工大学", "department": "制药工程（本科）" },
+      "knowsAbout": ["医药 GEO（生成式引擎优化）", "医药商务拓展与大客户运营", "医学内容策略与白皮书策划", "AI 知识库与写作智能体工作流", "项目管理与交付复盘"]
+    }
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#about">跳到个人介绍</a>
   <canvas id="bg" aria-hidden="true"></canvas>
   <div class="ui">
-    <header>
+    <header class="stagger" style="--delay:0.05s">
       <a class="brand" href="index.html" aria-label="孙宇轩个人网站首页">
         <span class="brand-mark" aria-hidden="true">YX</span>
-        <span><strong>YUXUAN</strong><small>业务 / 项目 / AI 探索</small></span>
+        <span><strong>YUXUAN</strong><small>医药业务 / 项目运营 / AI 应用</small></span>
       </a>
       <div class="top-controls">
         <button id="motion-toggle" type="button" aria-pressed="false">暂停动效</button>
         <output class="counter" id="project-count" aria-label="当前展示 4 个项目">04</output>
       </div>
     </header>
-    <nav class="tags" aria-label="按领域筛选项目">
-      <button type="button" data-filter="all" aria-pressed="true">全部</button>
-      <button type="button" data-filter="geo" aria-pressed="false">GEO</button>
-      <button type="button" data-filter="ai" aria-pressed="false">AI</button>
-      <button type="button" data-filter="content" aria-pressed="false">内容</button>
-      <button type="button" data-filter="strategy" aria-pressed="false">策略</button>
-      <button type="button" data-filter="project" aria-pressed="false">项目</button>
-      <button type="button" data-filter="business" aria-pressed="false">业务</button>
-      <button type="button" data-filter="tools" aria-pressed="false">工具</button>
-      <button type="button" data-filter="research" aria-pressed="false">研究</button>
-      <button type="button" data-filter="experience" aria-pressed="false">经历</button>
-    </nav>
-    <p class="media-note">精选项目 / 04<br>动态视频为视觉演示，非项目实录</p>
-    <section class="list" id="projects" aria-label="精选项目" tabindex="0">
-      <article class="card" data-tags="geo ai tools research">
-        <a class="card-link" href="geo-report/" aria-label="查看 GEO 分析工作台，历史只读案例">
-          <div class="thumb"><video src="assets/motion/lattices-geo-v2.mp4" poster="assets/motion/lattices-geo-v2.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
-          <div class="meta"><span>GEO / 分析工作台<br>回答、品牌与引用</span><span>01 / 工具实践<br>历史只读案例</span></div>
-        </a>
-      </article>
-      <article class="card" data-tags="geo ai content strategy project business tools">
-        <button class="card-link" type="button" data-project="bailijin" aria-haspopup="dialog">
-          <div class="thumb"><video src="assets/motion/prism-geo-preview.mp4" poster="assets/motion/prism-geo-preview.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
-          <div class="meta"><span>内资某公司拳头免疫唯一仿制产品 / GEO 项目<br>从售前到业务复盘</span><span>02 / GEO 项目<br>全链路实践</span></div>
-        </button>
-      </article>
-      <article class="card" data-tags="content strategy project business research">
-        <button class="card-link" type="button" data-project="luoxin" aria-haspopup="dialog">
-          <div class="thumb"><video src="assets/motion/nebular-whitepaper-v2.mp4" poster="assets/motion/nebular-whitepaper-v2.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
-          <div class="meta"><span>内资某公司消化原研产品 / 白皮书<br>将需求转为内容方案</span><span>03 / 方案策划<br>跨团队协作</span></div>
-        </button>
-      </article>
-      <article class="card" data-tags="experience business ai">
-        <a class="card-link" href="resume.html" aria-label="查看孙宇轩完整经历与两页简历">
-          <div class="thumb"><video src="assets/motion/fall-profile-v2.mp4" poster="assets/motion/fall-profile-v2.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
-          <div class="meta"><span>孙宇轩 / 个人经历<br>医药、业务与 AI</span><span>04 / 个人经历<br>两页个人简历</span></div>
-        </a>
-      </article>
-      <p class="empty-state" hidden>暂无匹配项目。<button type="button" data-reset-filter>查看全部</button></p>
-      <div class="list-end">持续探索，持续记录。</div>
-    </section>
+
     <main class="about" id="about" tabindex="-1">
-      <section>
-        <h1>[关于我]</h1>
-        <p>我是孙宇轩，上海三道几何智能体科技有限公司联合创始人。</p>
-        <p>工作覆盖商务拓展、客户运营与项目管理，围绕业务需求推进内容生产与 AI 应用建设。</p>
-      </section>
-      <section>
-        <h2>[我的工作]</h2>
-        <p>让专业信息，穿过噪声，成为答案。</p>
-        <p>从理解客户需求开始，推进方案策划、项目运营与 AI 工具建设，再用复盘改进下一次交付。</p>
-      </section>
-      <section>
-        <h2>[正在探索]</h2>
-        <ul class="exploring"><li>医药 GEO 与内容策略</li><li>智能体与工作流编排</li><li>AI 产品与项目管理</li><li>业务需求与工具实践</li></ul>
-      </section>
-      <section>
-        <h2>[联系我]</h2>
-        <button class="text-link mobile-projects" type="button" data-open-projects aria-haspopup="dialog">查看项目 →</button>
-        <a href="geo-report/">公开 GEO 分析案例 →</a>
-        <a href="resume.html">在线阅读简历 →</a>
-        <a href="read.html">文字版介绍 →</a>
-        <a href="assets/sun-yuxuan-resume.pdf?v=resume-20261026" download="孙宇轩_个人品牌简历.pdf">下载简历 PDF →</a>
-        <a href="mailto:1613395320@qq.com">邮箱 → 1613395320@qq.com</a>
-      </section>
+      <h1 class="stagger" style="--delay:0.14s">孙宇轩</h1>
+      <p class="role stagger" style="--delay:0.22s">上海三道几何智能体科技有限公司联合创始人</p>
+      <p class="intro stagger" style="--delay:0.30s">深耕医药行业商务拓展与项目全链路运营。从挖掘药企需求、推进方案立项，到搭建产品知识库与 AI 写作智能体管线，让专业医学信息穿过噪声，转化为可量化的业务结果。</p>
+      <div class="actions stagger" style="--delay:0.38s">
+        <button class="text-link primary-cta" type="button" data-project="bailijin" data-focus-trigger="1">查看 GEO 项目实践 <span class="arrow-glyph" aria-hidden="true">↗</span></button>
+        <a class="primary-cta" href="resume.html">阅读完整简历 <span class="arrow-glyph" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="minor stagger" style="--delay:0.45s">
+        <a href="read.html">专栏与履历全文</a>
+        <a href="assets/sun-yuxuan-resume.pdf" download="孙宇轩_个人简历.pdf">下载简历 PDF</a>
+        <a href="mailto:1613395320@qq.com">联系我</a>
+      </div>
     </main>
-    <p class="scene-caption" aria-hidden="true">从复杂信息<br>到清晰判断</p>
-    <p class="fallback-note" role="status">当前设备未启用粒子渲染，项目与简历仍可查看。</p>
+
+    <p class="media-note stagger" style="--delay:0.18s"><strong>精选项目</strong><span>业务实践 · 工具与方法</span></p>
+    <section class="list" id="projects" aria-label="精选项目" tabindex="0">
+      <article class="card stagger" style="--delay:0.24s; --item-accent:#70e1ff" data-tags="geo ai tools research" data-focus-index="0" data-caption="01 · 30 组核心提问 · 353 条引用信源拆解">
+        <a class="card-link" href="geo-report/" aria-label="打开 GEO 分析工作台，查看问答与引用信源拆解">
+          <div class="meta"><small>01</small><div><strong>一次 AI 回答，引用了谁？</strong><span>GEO 分析工作台 · 问答与信源拆解</span></div></div>
+          <div class="thumb"><video src="assets/motion/lattices-geo-v2.mp4?v=20261120" poster="assets/motion/lattices-geo-v2.jpg?v=20261120" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </a>
+      </article>
+      <article class="card stagger" style="--delay:0.32s; --item-accent:#bc99ff" data-tags="geo ai content strategy project business tools" data-focus-index="1" data-caption="02 · 沉淀 55 篇正式稿 · 提及率 7.63% → 10.25%">
+        <button class="card-link" type="button" data-project="bailijin" aria-haspopup="dialog">
+          <div class="meta"><small>02</small><div><strong>一个医药 GEO 项目，从售前到复盘</strong><span>内资某公司拳头免疫唯一仿制产品</span></div></div>
+          <div class="thumb"><video src="assets/motion/prism-geo-preview.mp4" poster="assets/motion/prism-geo-preview.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </button>
+      </article>
+      <article class="card stagger" style="--delay:0.40s; --item-accent:#f3ca8c" data-tags="content strategy project business research" data-focus-index="2" data-caption="03 · 商务 × 医学共创 · 3 轮提案成功立项">
+        <button class="card-link" type="button" data-project="luoxin" aria-haspopup="dialog">
+          <div class="meta"><small>03</small><div><strong>一份白皮书方案，如何推进到立项？</strong><span>内资某公司消化原研产品</span></div></div>
+          <div class="thumb"><video src="assets/motion/nebular-whitepaper-v2.mp4" poster="assets/motion/nebular-whitepaper-v2.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </button>
+      </article>
+      <article class="card stagger" style="--delay:0.48s; --item-accent:#7ce8c0" data-tags="experience business ai" data-focus-index="3" data-caption="04 · 医药科班 · 大客户拓展 · AI 工作流落地">
+        <a class="card-link" href="resume.html" aria-label="查看孙宇轩完整经历与两页简历">
+          <div class="meta"><small>04</small><div><strong>孙宇轩的工作经历</strong><span>商务拓展 · 项目运营 · AI 应用</span></div></div>
+          <div class="thumb"><video src="assets/motion/fall-profile-v2.mp4" poster="assets/motion/fall-profile-v2.jpg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </a>
+      </article>
+
+      <div class="list-end">持续探索，持续交付。</div>
+    </section>
+
+    <p class="scene-caption stagger" style="--delay:0.58s" id="scene-caption" aria-hidden="true">从复杂信息<br>到清晰判断</p>
+    <p class="fallback-note" role="status">项目实践与完整履历可直接浏览。</p>
   </div>
+
   <dialog id="project-dialog" aria-labelledby="detail-title">
-    <div class="dialog-top"><span>项目记录</span><button type="button" data-close-dialog aria-label="关闭项目详情">关闭 ×</button></div>
+    <div class="dialog-top">
+      <span class="dialog-tag">SELECTED CASE / 项目实践拆解</span>
+      <button type="button" data-close-dialog aria-label="关闭项目详情">关闭 <span aria-hidden="true">×</span></button>
+    </div>
     <div class="dialog-body" id="detail-content"></div>
   </dialog>
-  <dialog id="projects-dialog" aria-labelledby="mobile-project-title">
-    <div class="dialog-top"><h2 id="mobile-project-title">项目目录</h2><button type="button" data-close-dialog aria-label="关闭项目目录">关闭 ×</button></div>
-    <div class="mobile-index">
-      <a href="geo-report/"><span>01 / GEO 分析工作台</span><small>历史只读案例 ↗</small></a>
-      <button type="button" data-project="bailijin"><span>02 / 内资某公司拳头免疫唯一仿制产品 GEO 全链路项目</span><small>查看项目记录 ↗</small></button>
-      <button type="button" data-project="luoxin"><span>03 / 内资某公司消化原研产品白皮书</span><small>查看方案实践 ↗</small></button>
-      <a href="resume.html"><span>04 / 个人经历</span><small>在线阅读简历 ↗</small></a>
-    </div>
-  </dialog>
+
   <template id="project-bailijin">
-    <p class="detail-kicker">02 / GEO 项目实践</p><h2 id="detail-title">内资某公司拳头免疫唯一仿制产品 GEO 全链路项目</h2>
-    <p>围绕内资某公司拳头免疫唯一仿制产品项目，参与从售前沟通、执行规划到阶段复盘的完整流程。</p>
-    <h3>我的职责</h3><ul><li>分析产品、竞品与 AI 搜索现状，沟通需求、范围与阶段目标。</li><li>设计用户问题、内容主题、渠道与交付排期。</li><li>搭建产品知识库与写作智能体框架，串联资料检索、文章生成与内容筛查。</li><li>统筹生产与发布推进，协调客户反馈，分析品牌与引用来源。</li></ul>
-    <h3>阶段记录</h3><p>项目沉淀 55 篇正式稿，汇总 239 条发布链接；品牌提及率由 7 月 7.63% 升至 9 月 10.25%。</p><p class="source-note">数据口径：2026 年第三季度项目报告。与公开工作台中的单轮历史案例口径不同。</p>
-    <a class="detail-action" href="geo-report/">查看公开 GEO 分析案例 ↗</a>
+    <div class="detail-sheet" style="--dialog-accent:#bc99ff">
+      <p class="detail-kicker">02 / GEO 全链路实践</p>
+      <h2 id="detail-title">内资某公司拳头免疫唯一仿制产品 GEO 全链路项目</h2>
+      <p class="detail-lead">围绕拳头免疫唯一仿制产品的 AI 搜索心智建设诉求，统筹从售前诊断、内容规划、智能体搭建到交付复盘的完整闭环。</p>
+
+      <div class="detail-metrics" aria-label="项目阶段成果">
+        <div class="detail-metric">
+          <strong>55<small>篇</small></strong>
+          <span>正式医学稿件沉淀</span>
+        </div>
+        <div class="detail-metric">
+          <strong>239<small>条</small></strong>
+          <span>多渠道发布链接覆盖</span>
+        </div>
+        <div class="detail-metric">
+          <strong>7.63% → 10.25%</strong>
+          <span>Q3 品牌提及率稳步提升</span>
+        </div>
+      </div>
+
+      <h3>核心推进动作</h3>
+      <ul>
+        <li>诊断产品、竞品与主流 AI 搜索基线表现，对齐客户业务诉求与阶段交付目标。</li>
+        <li>设计目标用户提问矩阵、内容主题与分发渠道，统筹生产排期与交付节奏。</li>
+        <li>搭建结构化产品知识库与写作智能体管线，串联资料检索、初稿生成与合规筛查。</li>
+        <li>推进内容规模化落地，追踪品牌提及与底层引用信源分布，驱动策略持续迭代。</li>
+      </ul>
+
+      <h3>阶段交付成果</h3>
+      <p>项目累计沉淀 55 篇正式稿、覆盖 239 条渠道链接；2026 年 Q3 监测期内，目标问题集下的品牌提及率由 7 月 7.63% 升至 9 月 10.25%。</p>
+
+      <div class="detail-footer">
+        <a class="detail-action" href="geo-report/">打开 GEO 分析工作台样本 ↗</a>
+        <button type="button" class="detail-switch" data-switch-project="luoxin">下一项目：03 消化原研产品白皮书 →</button>
+      </div>
+    </div>
   </template>
+
   <template id="project-luoxin">
-    <p class="detail-kicker">03 / 方案策划</p><h2 id="detail-title">内资某公司消化原研产品白皮书</h2>
-    <p>围绕客户拓展零售市场的需求，协同医学团队提出定制白皮书方案。</p>
-    <h3>我的职责</h3><ul><li>理解客户需求，将业务目标转为专业内容方案。</li><li>调研竞品，优化标书与问卷设计。</li><li>协调客户沟通、内部提案及跨团队协作。</li></ul>
-    <h3>阶段记录</h3><p>完成 3 轮内部提案与预算审批，推动项目立项。</p><p class="source-note">此处展示方案策划与立项经历，不代表白皮书已正式出版。</p>
-    <a class="detail-action" href="resume.html">查看完整个人经历 ↗</a>
+    <div class="detail-sheet" style="--dialog-accent:#f3ca8c">
+      <p class="detail-kicker">03 / 商业策划与立项推进</p>
+      <h2 id="detail-title">内资某公司消化原研产品白皮书</h2>
+      <p class="detail-lead">围绕药企客户拓展院外零售市场的核心诉求，联合医学团队打造定制化白皮书立项全案。</p>
+
+      <div class="detail-metrics" aria-label="项目关键节点">
+        <div class="detail-metric">
+          <strong>3<small>轮</small></strong>
+          <span>内部提案与预算评审</span>
+        </div>
+        <div class="detail-metric">
+          <strong>商务 × 医学</strong>
+          <span>跨团队调研与方案共创</span>
+        </div>
+        <div class="detail-metric">
+          <strong>正式立项</strong>
+          <span>完成零售拓展方案闭环</span>
+        </div>
+      </div>
+
+      <h3>核心推进动作</h3>
+      <ul>
+        <li>深入拆解客户零售药店渠道拓展痛点，将商业增长目标转化为专业医学内容与调研方案。</li>
+        <li>主导同类竞品传播策略对标，迭代优化项目标书逻辑与终端调研问卷设计。</li>
+        <li>统筹客户多部门沟通对齐、预算测算及跨团队方案打磨。</li>
+      </ul>
+
+      <h3>阶段交付成果</h3>
+      <p>推进完成 3 轮客户内部提案汇报与预算审批，成功推动定制白皮书项目正式立项。</p>
+
+      <div class="detail-footer">
+        <a class="detail-action" href="resume.html">查看完整个人履历 ↗</a>
+        <button type="button" class="detail-switch" data-switch-project="bailijin">← 上一项目：02 免疫产品 GEO 全链路</button>
+      </div>
+    </div>
   </template>
-  <noscript><div class="noscript-note"><a href="read.html">阅读个人介绍与项目文字版</a> · 项目互动详情需启用 JavaScript。<a href="resume.html">查看简历</a> · <a href="geo-report/">查看 GEO 案例</a></div></noscript>
+
+  <noscript><div class="noscript-note"><a href="read.html">查看专栏与完整履历全文</a> · <a href="resume.html">个人简历</a> · <a href="geo-report/">GEO 分析工作台</a></div></noscript>
 </body>
 </html>
