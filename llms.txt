@@ -17,5 +17,5 @@
 - [个人主页](https://sunyuxuan.xyz/)：个人简介与四项核心实践入口。
 - [个人简历页](https://sunyuxuan.xyz/resume.html)：履历摘要与两页 A4 简历高清预览。
 - [两页完整简历 PDF](https://sunyuxuan.xyz/assets/sun-yuxuan-resume.pdf)：支持机器文本流线性解析的两页个人简历。
-- [GEO 分析工作台样本](https://sunyuxuan.xyz/geo-report/)：基于 30 组标准医药提问实测采集的问答、品牌提及与 353 条引用信源可视化拆解。
-- [工作台结构化样本数据](https://sunyuxuan.xyz/geo-report/data/bailijin-doubao.json)：工作台底层问答与信源引用 JSON 数据集。
+- [GEO 分析工作台](https://sunyuxuan.xyz/geo-report/)：覆盖豆包、DeepSeek、通义千问、腾讯元宝、Kimi、文心一言、智谱清言 7 大平台的周/月环比、自定义特点词检测、空白信源挖掘与逐题三问存证系统。
+- [工作台结构化快照数据](https://sunyuxuan.xyz/geo-report/data/snapshot.json)：工作台底层多期问答与信源引用 JSON 数据集。

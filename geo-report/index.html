@@ -1,21 +1,64 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="GEO 分析工作台样本：呈现医药品类 30 组核心提问下的模型回答、品牌提及分布与 353 条底层引用信源结构。">
-  <title>GEO 分析工作台｜AI 搜索问答与引用溯源样本</title>
-  <script type="module" crossorigin src="./assets/index-nRHp_jLn.js?v=20261120"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Dh61vBLj.css">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <link rel="canonical" href="https://sunyuxuan.xyz/geo-report/">
-  <link rel="alternate" type="text/plain" href="https://sunyuxuan.xyz/llms-full.txt" title="孙宇轩个人履历与项目实践全文">
-</head>
-<body>
-  <div id="root"></div>
-  <noscript>
-    <h1>GEO 分析工作台样本</h1>
-    <p>可直接<a href="data/bailijin-doubao.json">查看结构化采集数据 (JSON)</a>，或前往<a href="../read.html">专栏与履历全文</a>了解完整项目实践。</p>
-  </noscript>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="no-referrer" />
+    <title>GEO 分析工作台｜多平台周月环比与信源归因系统</title>
+    <meta name="description" content="医药品类 7 大 AI 平台多周/多月 GEO 监测与归因分析工作台：支持提及率与首推率环比、自定义特点词实时检测、实引空白站点挖掘、逐题三问存证与 A4 报告导出。" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://sunyuxuan.xyz/geo-report/" />
+    <link rel="alternate" type="text/plain" href="https://sunyuxuan.xyz/llms-full.txt" title="孙宇轩个人履历与项目实践全文" />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles/workspace.css" />
+    <link rel="stylesheet" href="./styles/print-report.css" />
+    <script type="module" src="./src/app.mjs"></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">跳至分析内容</a>
+    <aside>
+      <header class="identity">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="37" height="37" fill="none" stroke="currentColor" stroke-opacity=".35" />
+          <path d="M8 27h6l4-10 5 14 4-9h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" />
+          <rect x="30" y="6" width="4" height="4" fill="currentColor" />
+        </svg>
+        <div><b>GEO/WORKSPACE</b><small>从回答，追溯到依据</small></div>
+      </header>
+      <nav aria-label="分析栏目"></nav>
+      <div class="side-foot"><a class="back-portfolio" href="../index.html">← 返回孙宇轩个人主页</a><div id="snapshot-date"></div></div>
+    </aside>
+    <main>
+      <header class="page-head">
+        <div>
+          <div id="project" class="eyebrow"></div>
+          <h1>分析工作台</h1>
+        </div>
+        <div class="head-actions"><a class="outline back-top" href="../index.html">← 个人主页</a><button id="export" class="outline" aria-haspopup="dialog" aria-controls="report-export">↓ 导出当前报告</button></div>
+      </header>
+      <dialog id="report-export" aria-labelledby="export-title">
+        <h2 id="export-title">当前报告预览与导出</h2>
+        <div class="report-tools">
+          <button data-export="print">打印 / 另存为 PDF</button>
+          <button data-export="html">下载单文件 HTML</button>
+          <button data-export="csv">下载 CSV 明细包</button>
+          <button data-export="json">下载筛选快照 JSON</button>
+          <button data-export="close">收起预览</button>
+        </div>
+        <p role="status"></p>
+        <iframe title="A4 报告预览"></iframe>
+      </dialog>
+      <section id="controls" aria-label="全局筛选"></section>
+      <section id="content" tabindex="-1" aria-label="分析内容"><p role="status">正在载入分析快照…</p></section>
+    </main>
+    <dialog id="drawer" aria-labelledby="drawer-title">
+      <header>
+        <h2 id="drawer-title"></h2>
+        <button id="close" aria-label="关闭存证抽屉">×</button>
+      </header>
+      <section id="drawer-body"></section>
+    </dialog>
+    <div id="tooltip" role="tooltip" hidden></div>
+  </body>
 </html>
