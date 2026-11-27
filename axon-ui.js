@@ -142,7 +142,7 @@
   // Smooth modal dialog open, project switch & close
   const detailDialog = document.querySelector('#project-dialog');
   const detailContent = document.querySelector('#detail-content');
-  const projectFocusMap = { bailijin: 1, luoxin: 2 };
+  const projectFocusMap = { bailijin: 1, crm: 2, luoxin: 2 };
   let closingTimer = 0;
 
   const bindDialogInternalActions = () => {
