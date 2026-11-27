@@ -367,9 +367,9 @@ function render() {
   decorate();
   pageActionCount = actions.length;
 }
-// Visual-only pass: colours signed pp deltas and feeds KPI gauges. Never alters text.
+// Visual-only pass: colours signed % deltas and feeds KPI gauges. Never alters text.
 function decorate() {
-  const delta = /^([+-])(\d+(?:\.\d+)?) pp$/;
+  const delta = /^([+-])(\d+(?:\.\d+)?)%$/;
   for (const el of document.querySelectorAll('#content [data-delta], #content .ranking b, #content td, #content td small')) {
     if (el.children.length) continue;
     const m = delta.exec(el.textContent.trim());

@@ -229,7 +229,7 @@ function csvArchive(files) {
 }
 function summaryCsv(model) {
   const rows = [
-    ['报告 ID', '当前期', '基准期', '章节', '表名', '行', '字段', '值', '分子', '分母', '原始比例', '可比百分点'],
+    ['报告 ID', '当前期', '基准期', '章节', '表名', '行', '字段', '值', '分子', '分母', '原始比例', '可比环比(%)'],
   ];
   for (const chapter of model.chapters)
     for (const t of chapter.tables)

@@ -11,9 +11,19 @@
     <link rel="canonical" href="https://sunyuxuan.xyz/geo-report/" />
     <link rel="alternate" type="text/plain" href="https://sunyuxuan.xyz/llms-full.txt" title="孙宇轩个人履历与项目实践全文" />
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles/workspace.css" />
-    <link rel="stylesheet" href="./styles/print-report.css" />
-    <script type="module" src="./src/app.mjs"></script>
+    <link rel="stylesheet" href="./styles/workspace.css?v=20261127p" />
+    <link rel="stylesheet" href="./styles/print-report.css?v=20261127p" />
+    <script type="importmap">
+      {
+        "imports": {
+          "./src/charts.mjs": "./src/charts.mjs?v=20261127p",
+          "./src/report-export.mjs": "./src/report-export.mjs?v=20261127p",
+          "./src/views/methodology.mjs": "./src/views/methodology.mjs?v=20261127p",
+          "./vendor/report-model.mjs": "./vendor/report-model.mjs?v=20261127p"
+        }
+      }
+    </script>
+    <script type="module" src="./src/app.mjs?v=20261127p"></script>
   </head>
   <body>
     <a class="skip" href="#content">跳至分析内容</a>

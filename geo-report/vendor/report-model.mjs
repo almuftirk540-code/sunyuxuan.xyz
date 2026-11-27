@@ -23,8 +23,10 @@ export function formatCell(value) {
   if (value == null) return '—';
   if (typeof value !== 'object') return String(value);
   if ('deltaPp' in value) {
-    const n = value.deltaPp;
-    return n == null ? '不可比' : (n >= 0 ? '+' : '') + n.toFixed(1) + ' pp';
+    const raw = value.deltaPp;
+    if (raw == null) return '不可比';
+    const n = Math.abs(raw) < 0.05 ? 0 : raw;
+    return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
   }
   return pct(value.rate) + ' (' + value.hits + '/' + value.denominator + ')';
 }
@@ -470,9 +472,16 @@ export function validateNarrativeNumbers(text, allowedNumbers) {
     /([+-]?(?:\d+(?:,\d{3})*(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?)\s*(个百分点|百分点|pp\b|%)?/gi,
   )) {
     const n = Number(match[1].replaceAll(',', ''));
+    const rounded = Number(n.toFixed(1));
     const key = match[2] === '%' ? 'rates' : match[2] ? 'points' : 'integers';
-    if (!Number.isFinite(n) || (key === 'integers' && !Number.isSafeInteger(n)) || !sets[key].has(Number(n.toFixed(1))))
-      unexpected.add(match[0].trim());
+    const valid =
+      Number.isFinite(n) &&
+      (key === 'rates'
+        ? sets.rates.has(rounded) || sets.points.has(rounded)
+        : key === 'integers'
+          ? Number.isSafeInteger(n) && sets.integers.has(rounded)
+          : sets.points.has(rounded));
+    if (!valid) unexpected.add(match[0].trim());
   }
   return { ok: !unexpected.size, unexpectedNumbers: [...unexpected] };
 }
@@ -540,7 +549,7 @@ export function buildReportViewModel(snapshot, queryState = {}, { customNarrativ
     validation,
     appendix: [
       '提及率按有效回答去重。未点名指标排除题干点名的回答。首推限有推荐意图的问题，唯一与并列按回答取并集。',
-      '采集完成度采用原计划槽位作分母。无有效观察显示「—」。共同可比单元为两期均有观察的同题同平台，先求单元内命中率再等权计算百分点变化。',
+      '采集完成度采用原计划槽位作分母。无有效观察显示「—」。共同可比单元为两期均有观察的同题同平台，先求单元内命中率再等权计算百分比变化。',
       '三问分布仅计入每周三次均有效的单元。特点词按回答去重，表述归属仅描述回答正文。',
       '站点覆盖按回答去重，分母为可观察角标的回答数。文章按实引回答数排序，展示前十篇竞品关联文章，每篇摘录一条已绑定原句（如有）。竞品关联来自来源标题、摘要或已绑定原句。',
     ],

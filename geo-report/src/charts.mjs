@@ -5,7 +5,11 @@ export const esc = (value) =>
   );
 export const pct = (value) => (value == null ? '—' : (value * 100).toFixed(1) + '%');
 export const fraction = (r) => r.hits + '/' + r.denominator;
-export const pp = (value) => (value == null ? '不可比' : (value >= 0 ? '+' : '') + value.toFixed(1) + ' pp');
+export const pp = (value) => {
+  if (value == null) return '不可比';
+  const n = Math.abs(value) < 0.05 ? 0 : value;
+  return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+};
 export const platformNames = {
   doubao: '豆包',
   deepseek: 'DeepSeek',
